@@ -1,0 +1,49 @@
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: user-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 15s
+      timeout: 15s
+      retries: 3
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - network
+  user:
+    container_name: user-service
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: mysql:3306
+    env_file:
+      - .env
+    volumes:
+      - logs:/sc-user/logs
+    depends_on:
+      mysql:
+        condition: service_healthy
+        restart: true
+    networks:
+      - network
+volumes:
+  logs:
+    name: user-logs
+  db-data:
+    name: user-db
+networks:
+  network:
+    name: user-network

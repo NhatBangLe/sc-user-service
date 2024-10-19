@@ -1,0 +1,6 @@
+logging:
+  level:
+    root: ${ROOT_LOG_LEVEL:info}
+    web: ${WEB_LOG_LEVEL:error}
+  file:
+    name: ./logs/user-service.log
