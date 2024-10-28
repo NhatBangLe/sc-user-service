@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/auth_service
+    username: admin
+    password: admin
+  cloud:
+    discovery:
+      enabled: false
+eureka:
+  client:
+    enabled: false
+keycloak:
+  server-url: http://localhost:8181
+  realm: realm
+  client-id: client-id
+  client-secret: secret
