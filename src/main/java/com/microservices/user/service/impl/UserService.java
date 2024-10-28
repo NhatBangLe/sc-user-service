@@ -13,6 +13,8 @@ import com.microservices.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
@@ -84,6 +86,15 @@ public class UserService implements IUserService {
         }
 
         if (isUpdated) userRepository.save(user);
+    }
+
+    @Override
+    public List<UserResponse> getAllExpertsByDomain(String domainId) {
+        var domain = domainRepository.findById(domainId)
+                .orElseThrow(() -> new NoEntityFoundException("No entity found with id: " + domainId));
+        return domain.getUsers().stream()
+                .map(this::convertToUserResponse)
+                .toList();
     }
 
     private User findUserById(String userId) throws NoEntityFoundException {

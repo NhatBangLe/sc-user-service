@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
@@ -21,6 +23,20 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final IUserService userService;
+
+    @GetMapping("/{domainId}/experts")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponse(
+            responseCode = "404",
+            description = "Domain not found",
+            content = @Content(
+                    mediaType = MediaType.TEXT_PLAIN_VALUE,
+                    schema = @Schema(example = "Domain not found")
+            )
+    )
+    public List<UserResponse> getAllExpertsByDomain(@PathVariable String domainId) {
+        return userService.getAllExpertsByDomain(domainId);
+    }
 
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)

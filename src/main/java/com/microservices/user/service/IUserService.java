@@ -10,6 +10,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 @Validated
 public interface IUserService {
 
@@ -22,4 +24,5 @@ public interface IUserService {
                            @NotNull @Valid UserDomainsUpdateRequest userDomainsUpdateRequest)
             throws NoEntityFoundException;
 
+    List<UserResponse> getAllExpertsByDomain(@NotBlank String domainId);
 }
