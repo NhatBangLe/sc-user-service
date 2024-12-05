@@ -4,6 +4,7 @@ import com.microservices.user.config.KeycloakConfigurationProperties;
 import com.microservices.user.constant.OAuth2Constants;
 import com.microservices.user.dto.keycloak.ErrorMessageResponse;
 import com.microservices.user.dto.keycloak.ErrorWithDescriptionResponse;
+import com.microservices.user.dto.keycloak.ErrorWithFieldResponse;
 import com.microservices.user.dto.keycloak.KeycloakRegisterRequest;
 import com.microservices.user.dto.response.AuthenticatedResponse;
 import com.microservices.user.dto.request.UserLoginRequest;
@@ -133,8 +134,14 @@ public class KeycloakService implements IKeycloakService {
             var errorMessage = "Unknown error";
 
             if (statusCode.isSameCodeAs(HttpStatus.BAD_REQUEST)) {
-                var response = e.getResponseBodyAs(ErrorWithDescriptionResponse.class);
-                if (response != null) errorMessage = response.description();
+                var isErrorFieldResponse = e.getResponseBodyAsString().contains("\"field\":");
+                if (isErrorFieldResponse) {
+                    var fieldResponse = e.getResponseBodyAs(ErrorWithFieldResponse.class);
+                    if (fieldResponse != null) errorMessage = fieldResponse.errorMessage();
+                } else {
+                    var response = e.getResponseBodyAs(ErrorWithDescriptionResponse.class);
+                    if (response != null) errorMessage = response.description();
+                }
             } else if (statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
                 var response = e.getResponseBodyAs(ErrorMessageResponse.class);
                 if (response != null) errorMessage = response.errorMessage();
