@@ -30,7 +30,7 @@ public class User {
 
     private LocalDate birthDate;
 
-    @Column(length = 150, nullable = false)
+    @Column(length = 150, nullable = false, unique = true)
     private String email;
 
     @ManyToMany

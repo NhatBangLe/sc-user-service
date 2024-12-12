@@ -48,8 +48,22 @@ public class UserController {
                     schema = @Schema(example = "User not found")
             )
     )
-    public UserResponse getUser(@PathVariable String userId) {
-        return userService.getUser(userId);
+    public UserResponse getUserById(@PathVariable String userId) {
+        return userService.getUserById(userId);
+    }
+
+    @GetMapping("/{userEmail}/email")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponse(
+            responseCode = "404",
+            description = "User not found",
+            content = @Content(
+                    mediaType = MediaType.TEXT_PLAIN_VALUE,
+                    schema = @Schema(example = "User not found")
+            )
+    )
+    public UserResponse getUserByEmail(@PathVariable String userEmail) {
+        return userService.getUserByEmail(userEmail);
     }
 
     @PatchMapping("/{userId}")

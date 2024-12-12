@@ -15,7 +15,9 @@ import java.util.List;
 @Validated
 public interface IUserService {
 
-    UserResponse getUser(@NotBlank String userId) throws NoEntityFoundException;
+    UserResponse getUserById(@NotBlank String userId) throws NoEntityFoundException;
+
+    UserResponse getUserByEmail(@NotBlank String userEmail) throws NoEntityFoundException;
 
     void updateUser(@NotBlank String userId, @NotNull @Valid UserUpdateRequest userUpdateRequest)
             throws NoEntityFoundException, IllegalAttributeException;

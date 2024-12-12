@@ -23,8 +23,15 @@ public class UserService implements IUserService {
     private final DomainRepository domainRepository;
 
     @Override
-    public UserResponse getUser(String userId) throws NoEntityFoundException {
+    public UserResponse getUserById(String userId) throws NoEntityFoundException {
         var user = findUserById(userId);
+        return convertToUserResponse(user);
+    }
+
+    @Override
+    public UserResponse getUserByEmail(String userEmail) throws NoEntityFoundException {
+        var user = userRepository.findByEmailIgnoreCase(userEmail)
+                .orElseThrow(() -> new NoEntityFoundException("No user found with email: " + userEmail));
         return convertToUserResponse(user);
     }
 
