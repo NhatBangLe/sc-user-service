@@ -3,6 +3,7 @@ package com.microservices.user.controller;
 import com.microservices.user.dto.request.DomainCreateRequest;
 import com.microservices.user.dto.request.DomainUpdateRequest;
 import com.microservices.user.dto.response.DomainResponse;
+import com.microservices.user.dto.response.PagingObjectsResponse;
 import com.microservices.user.service.IDomainService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/user/domain")
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class DomainController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<DomainResponse> getAllDomains(
+    public PagingObjectsResponse<DomainResponse> getAllDomains(
             @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
             @RequestParam(required = false, defaultValue = "6") Integer pageSize
     ) {

@@ -3,6 +3,7 @@ package com.microservices.user.service.impl;
 import com.microservices.user.dto.request.DomainCreateRequest;
 import com.microservices.user.dto.request.DomainUpdateRequest;
 import com.microservices.user.dto.response.DomainResponse;
+import com.microservices.user.dto.response.PagingObjectsResponse;
 import com.microservices.user.entity.Domain;
 import com.microservices.user.exception.IllegalAttributeException;
 import com.microservices.user.exception.NoEntityFoundException;
@@ -13,8 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class DomainService implements IDomainService {
@@ -24,15 +23,23 @@ public class DomainService implements IDomainService {
     @Override
     public DomainResponse getDomain(String domainId) throws NoEntityFoundException {
         var domain = findDomainById(domainId);
-        return convertDomainToResponse(domain);
+        return mapDomainToResponse(domain);
     }
 
     @Override
-    public List<DomainResponse> getAllDomains(Integer pageNumber, Integer pageSize) {
+    public PagingObjectsResponse<DomainResponse> getAllDomains(Integer pageNumber, Integer pageSize) {
         var pageable = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
-        return domainRepository.findAll(pageable).stream()
-                .map(this::convertDomainToResponse)
-                .toList();
+        var domains = domainRepository.findAll(pageable);
+        return new PagingObjectsResponse<>(
+                domains.getTotalPages(),
+                domains.getTotalElements(),
+                domains.getNumber(),
+                domains.getSize(),
+                domains.getNumberOfElements(),
+                domains.isFirst(),
+                domains.isLast(),
+                domains.map(this::mapDomainToResponse).toList()
+        );
     }
 
     @Override
@@ -77,7 +84,7 @@ public class DomainService implements IDomainService {
                 .orElseThrow(() -> new NoEntityFoundException("No domain found with id: " + domainId));
     }
 
-    private DomainResponse convertDomainToResponse(Domain domain) {
+    private DomainResponse mapDomainToResponse(Domain domain) {
         return new DomainResponse(
                 domain.getId(),
                 domain.getName(),
