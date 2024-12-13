@@ -6,8 +6,8 @@ RUN ./mvnw clean install -Dmaven.test.skip=true
 FROM eclipse-temurin:21-jre-jammy
 RUN addgroup --system spring && adduser --system spring && adduser spring spring
 
-COPY --from=build /app/target/user-service.jar /sc-user/app.jar
-WORKDIR /sc-user
+COPY --from=build /app/target/user-service.jar /app/app.jar
+WORKDIR /app
 RUN mkdir logs
 RUN chown spring:spring logs
 
