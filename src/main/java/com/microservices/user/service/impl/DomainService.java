@@ -10,6 +10,7 @@ import com.microservices.user.exception.NoEntityFoundException;
 import com.microservices.user.repository.DomainRepository;
 import com.microservices.user.service.IDomainService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,13 @@ public class DomainService implements IDomainService {
     }
 
     @Override
-    public PagingObjectsResponse<DomainResponse> getAllDomains(Integer pageNumber, Integer pageSize) {
+    public PagingObjectsResponse<DomainResponse> getAllDomains(String name, Integer pageNumber, Integer pageSize) {
         var pageable = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
-        var domains = domainRepository.findAll(pageable);
+        Page<Domain> domains;
+        if (name != null && !name.isBlank())
+            domains = domainRepository.findAllByNameContainsIgnoreCase(name, pageable);
+        else domains = domainRepository.findAll(pageable);
+
         return new PagingObjectsResponse<>(
                 domains.getTotalPages(),
                 domains.getTotalElements(),

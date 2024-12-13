@@ -26,10 +26,11 @@ public class DomainController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public PagingObjectsResponse<DomainResponse> getAllDomains(
+            @RequestParam(required = false, defaultValue = "") String name,
             @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
             @RequestParam(required = false, defaultValue = "6") Integer pageSize
     ) {
-        return domainService.getAllDomains(pageNumber, pageSize);
+        return domainService.getAllDomains(name, pageNumber, pageSize);
     }
 
     @GetMapping("/{domainId}")

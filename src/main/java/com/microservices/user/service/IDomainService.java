@@ -15,6 +15,7 @@ public interface IDomainService {
     DomainResponse getDomain(String domainId);
 
     PagingObjectsResponse<DomainResponse> getAllDomains(
+            String name,
             @NotNull @Min(value = 0, message = "pageNumber cannot be less than 0.")
             Integer pageNumber,
             @NotNull @Min(value = 0, message = "pageSize cannot be less than 0.")
