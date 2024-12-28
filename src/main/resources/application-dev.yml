@@ -10,7 +10,7 @@ eureka:
   client:
     enabled: false
 keycloak:
-  server-url: http://34.80.75.198
-  realm: sc-microservices
-  client-id: sc-mobile-app
-  client-secret: lzvqlZZbrpjSY5ZkHHdnPQGd6arhpdaW
+  server-url: localhost
+  realm: realm-name
+  client-id: client-id
+  client-secret: client-secret

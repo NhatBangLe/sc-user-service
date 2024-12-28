@@ -118,4 +118,11 @@ public class UserController {
         userService.updateUserDomains(userId, userDomainsUpdateRequest);
     }
 
+    @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponse(responseCode = "204", content = @Content)
+    public void deleteUser(@PathVariable String userId) {
+        userService.deleteUser(userId);
+    }
+
 }

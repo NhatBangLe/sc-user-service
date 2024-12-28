@@ -49,6 +49,12 @@ public class AuthController {
         return keycloakService.login(userLoginRequest);
     }
 
+    @PostMapping("/{userId}/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public boolean logout(@PathVariable String userId) {
+        return keycloakService.logout(userId);
+    }
+
     @PostMapping("/refresh")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponse(
@@ -88,8 +94,11 @@ public class AuthController {
                     content = @Content
             )
     })
-    public String register(@RequestBody UserRegisterRequest userRegisterRequest) {
-        return keycloakService.register(userRegisterRequest);
+    public String register(
+            @RequestParam(required = false, defaultValue = "false") Boolean isExpert,
+            @RequestBody UserRegisterRequest userRegisterRequest
+    ) {
+        return keycloakService.register(isExpert, userRegisterRequest);
     }
 
     @ExceptionHandler(KeycloakErrorException.class)
