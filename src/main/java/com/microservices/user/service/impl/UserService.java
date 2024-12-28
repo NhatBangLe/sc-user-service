@@ -6,21 +6,26 @@ import com.microservices.user.dto.response.UserResponse;
 import com.microservices.user.entity.Domain;
 import com.microservices.user.entity.User;
 import com.microservices.user.exception.IllegalAttributeException;
+import com.microservices.user.exception.KeycloakErrorException;
 import com.microservices.user.exception.NoEntityFoundException;
 import com.microservices.user.repository.DomainRepository;
 import com.microservices.user.repository.UserRepository;
 import com.microservices.user.service.IUserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final DomainRepository domainRepository;
+    private final KeycloakService keycloakService;
 
     @Override
     public UserResponse getUserById(String userId) throws NoEntityFoundException {
@@ -100,8 +105,18 @@ public class UserService implements IUserService {
         var domain = domainRepository.findById(domainId)
                 .orElseThrow(() -> new NoEntityFoundException("No entity found with id: " + domainId));
         return domain.getUsers().stream()
+                .filter(User::getIsExpert)
                 .map(this::convertToUserResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional(rollbackOn = {KeycloakErrorException.class})
+    public void deleteUser(String userId) throws NoEntityFoundException {
+        var user = findUserById(userId);
+        userRepository.delete(user);
+        var successful = keycloakService.deleteUser(userId);
+        if (successful) log.debug("Successfully deleted user: {}", userId);
     }
 
     private User findUserById(String userId) throws NoEntityFoundException {

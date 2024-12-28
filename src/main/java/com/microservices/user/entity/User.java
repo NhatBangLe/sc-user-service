@@ -19,6 +19,10 @@ public class User {
     @Column(name = "id", length = 36, nullable = false)
     private String id;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean isExpert = false;
+
     @Column(length = 50, nullable = false)
     private String firstName;
 

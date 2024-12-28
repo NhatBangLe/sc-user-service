@@ -15,7 +15,6 @@ public class KeycloakRegisterRequest implements Serializable {
     private Boolean emailVerified;
     private Boolean enabled;
     private List<Credential> credentials;
-//    private Map<String, List<String>> clientRoles;
 
     public record Credential(
             String type,
