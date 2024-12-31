@@ -17,12 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("*")
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/user/auth")
 @Tag(name = "Authenticator")
 @RequiredArgsConstructor
-@Slf4j
 public class AuthController {
 
     private final KeycloakService keycloakService;
