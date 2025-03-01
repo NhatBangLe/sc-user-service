@@ -6,11 +6,9 @@ services:
       - "2706:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-    env_file:
-      - .env
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: user_service
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       interval: 15s
@@ -29,24 +27,17 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
+      PROFILE_ACTIVE: prod
       DB_HOST: mysql:3306
-      PROFILE_ACTIVE: test
-
-      KC_SERVER_URL: https://keycloak-server:443
+      DB_USER: admin
+      DB_PASSWORD: admin
+      DB_DATABASE: user_service
+      KC_SERVER_URL: http://keycloak-server:443
       KC_REALM: realm
       KC_CLIENT_ID: client-id
       KC_CLIENT_SECRET: secret
 #      KC_TOKEN_PATH: /protocol/openid-connect/token
-
-      EUREKA_APP_NAME: user-service
-      EUREKA_IP_ADDR: 127.0.0.1
-      EUREKA_PORT: 80
-      REGISTER_ZONE: service-registry-1
-      DEFAULT_ZONE: http://admin:admin@service-registry:80/eureka/
-
       SWAGGER_SERVER_URL: http://gateway:80
-    env_file:
-      - .env
     volumes:
       - logs:/app/logs
     depends_on:
