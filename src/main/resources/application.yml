@@ -24,4 +24,5 @@ springdoc:
     path: /docs
   override-with-generic-response: false
 
-API_DOCS_SERVER: ${SWAGGER_SERVER_URL:http://localhost:8080}
+app:
+  api-docs-server: ${SWAGGER_SERVER_URL:http://localhost:8080}

@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 public class APIDocsConfiguration {
 
-    @Value("${API_DOCS_SERVER}")
+    @Value("${app.api-docs-server}")
     private String API_DOCS_SERVER;
 
     @Bean
