@@ -19,8 +19,8 @@ services:
     networks:
       - network
   user:
-    container_name: user-service
-    hostname: user-service-1
+    image: nhatbangle/sc-user:latest
+    container_name: sc-user
     ports:
       - "80:8080"
     build:
@@ -36,7 +36,6 @@ services:
       KC_REALM: realm
       KC_CLIENT_ID: client-id
       KC_CLIENT_SECRET: secret
-#      KC_TOKEN_PATH: /protocol/openid-connect/token
       SWAGGER_SERVER_URL: http://gateway:80
     volumes:
       - logs:/app/logs

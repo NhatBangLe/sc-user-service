@@ -134,7 +134,7 @@ public class UserService implements IUserService {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getGender(),
-                user.getBirthDate(),
+                user.getBirthDate().toString(),
                 user.getEmail(),
                 domainIds
         );

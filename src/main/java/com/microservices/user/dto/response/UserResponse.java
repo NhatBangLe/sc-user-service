@@ -3,7 +3,6 @@ package com.microservices.user.dto.response;
 import com.microservices.user.constant.Gender;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -14,7 +13,7 @@ public record UserResponse(
         String firstName,
         String lastName,
         Gender gender,
-        LocalDate birthDate,
+        String birthDate,
         String email,
         List<String> domainIds
 ) implements Serializable {
